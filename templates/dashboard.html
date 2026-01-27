@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextStep - Dashboard</title>
+    <style>
+        :root {
+            --color-primary-50:  #ECFDF5;
+            --color-primary-100: #D1FAE5;
+            --color-primary-300: #6EE7B7;
+            --color-primary-500: #059669;
+            --color-primary-600: #047857;
+            --color-primary-700: #065F46;
+
+            --color-secondary-50:  #F0F9FF;
+            --color-secondary-100: #E0F2FE;
+            --color-secondary-300: #7DD3FC;
+            --color-secondary-500: #0EA5E9;
+            --color-secondary-600: #0284C7;
+            --color-secondary-700: #0369A1;
+
+            --bg-default: #F9FAFB;
+            --bg-card: #FFFFFF;
+
+            --border-light: #E5E7EB;
+            --border-default: #D1D5DB;
+
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-muted: #6B7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-default);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-light);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-primary-600);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .profile-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--color-primary-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            border: 2px solid var(--border-light);
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: calc(100vh - 73px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-light);
+            padding: 24px 0;
+        }
+
+        .nav-item {
+            padding: 12px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--color-primary-50);
+            color: var(--color-primary-600);
+        }
+
+        .nav-item.active {
+            background: var(--color-primary-50);
+            color: var(--color-primary-600);
+            border-left-color: var(--color-primary-600);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .roadmap-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 40px;
+            overflow-x: auto;
+        }
+
+        .roadmap-tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            min-width: 800px;
+        }
+
+        .roadmap-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            margin: 30px 0;
+        }
+
+        .roadmap-node {
+            background: var(--bg-card);
+            border: 2px solid var(--color-primary-500);
+            border-radius: 8px;
+            padding: 12px 20px;
+            min-width: 180px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+
+        .roadmap-node:hover {
+            background: var(--color-primary-50);
+            border-color: var(--color-primary-600);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+        }
+
+        .roadmap-node.completed {
+            background: var(--color-primary-500);
+            color: white;
+            border-color: var(--color-primary-600);
+        }
+
+        .roadmap-node.in-progress {
+            background: var(--color-secondary-100);
+            border-color: var(--color-secondary-500);
+        }
+
+        .node-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .node-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .roadmap-node.completed .node-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .connector {
+            position: absolute;
+            background: var(--color-primary-300);
+            z-index: 1;
+        }
+
+        .connector-vertical {
+            width: 3px;
+            height: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100%;
+        }
+
+        .connector-horizontal {
+            height: 3px;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .branch-container {
+            display: flex;
+            gap: 24px;
+            position: relative;
+        }
+
+        .branch-node {
+            background: var(--bg-default);
+            border: 2px solid var(--border-default);
+            border-radius: 8px;
+            padding: 10px 16px;
+            min-width: 140px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .branch-node:hover {
+            background: var(--color-secondary-50);
+            border-color: var(--color-secondary-500);
+            color: var(--color-secondary-600);
+        }
+
+        .roadmap-section {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: var(--border-light);
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .section-label {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-card);
+            padding: 4px 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .progress-counter {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .slide-content {
+            min-height: 300px;
+            padding: 24px;
+            background: var(--bg-default);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .slide-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .slide-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .subtopics-list {
+            list-style: none;
+            margin-top: 16px;
+        }
+
+        .subtopics-list li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .subtopics-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--color-primary-500);
+        }
+
+        .slide-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary-600);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-700);
+        }
+
+        .btn-primary:disabled {
+            background: var(--border-default);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--color-primary-600);
+            border: 1px solid var(--color-primary-600);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-primary-50);
+        }
+
+        .btn-secondary:disabled {
+            background: var(--bg-card);
+            color: var(--border-default);
+            border-color: var(--border-default);
+            cursor: not-allowed;
+        }
+
+        .chat-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            max-width: 900px;
+            margin: 0 auto;
+            height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 80%;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .message.ai .message-avatar {
+            background: var(--color-primary-500);
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: var(--color-secondary-500);
+            color: white;
+        }
+
+        .message-content {
+            background: var(--bg-default);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .message.user .message-content {
+            background: var(--color-primary-50);
+            border-color: var(--color-primary-300);
+        }
+
+        .message-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .chat-input-container {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border-default);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: var(--color-primary-500);
+        }
+
+        .send-btn {
+            padding: 12px 24px;
+            background: var(--color-primary-600);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .send-btn:hover {
+            background: var(--color-primary-700);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .nav-item span {
+                display: none;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">NextStep</div>
+        <div class="user-profile">
+            <div class="user-info">
+                <div class="user-name">Zunaira Ahmed</div>
+                <div class="user-role">Aspiring Android Developer</div>
+            </div>
+            <div class="profile-photo">ZA</div>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="nav-item active" data-section="roadmap">
+                <span class="nav-icon"></span>
+                <span>Roadmap</span>
+            </div>
+            <div class="nav-item" data-section="progress">
+                <span class="nav-icon"></span>
+                <span>Progress</span>
+            </div>
+            <div class="nav-item" data-section="chat">
+                <span class="nav-icon"></span>
+                <span>AI Chat</span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="content-section active" id="roadmap">
+                <h1 class="section-title">Android Developer Roadmap</h1>
+                <p class="section-subtitle">Your complete learning path to becoming an Android developer</p>
+
+                <div class="roadmap-container">
+                    <div class="roadmap-tree">
+                        <div class="roadmap-section">
+                            <div class="roadmap-node completed">
+                                <div class="node-title">Start Here</div>
+                                <div class="node-subtitle">Begin Journey</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="roadmap-node completed">
+                                <div class="node-title">Programming Fundamentals</div>
+                                <div class="node-subtitle">3 months</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="branch-container">
+                                <div class="branch-node">Java Basics</div>
+                                <div class="branch-node">Kotlin Fundamentals</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="section-divider">
+                            <span class="section-label">Core Concepts</span>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="roadmap-node in-progress">
+                                <div class="node-title">OOP & Data Structures</div>
+                                <div class="node-subtitle">2 months</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="roadmap-node">
+                                <div class="node-title">Android Basics</div>
+                                <div class="node-subtitle">1 month</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="branch-container">
+                                <div class="branch-node">Activities</div>
+                                <div class="branch-node">Fragments</div>
+                                <div class="branch-node">Intents</div>
+                                <div class="branch-node">Layouts</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="section-divider">
+                            <span class="section-label">UI Development</span>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="roadmap-node">
+                                <div class="node-title">UI/UX Development</div>
+                                <div class="node-subtitle">1.5 months</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="branch-container">
+                                <div class="branch-node">RecyclerView</div>
+                                <div class="branch-node">ConstraintLayout</div>
+                                <div class="branch-node">Material Design</div>
+                                <div class="branch-node">Custom Views</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="section-divider">
+                            <span class="section-label">Data Layer</span>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="roadmap-node">
+                                <div class="node-title">Data Management</div>
+                                <div class="node-subtitle">1 month</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="branch-container">
+                                <div class="branch-node">SharedPreferences</div>
+                                <div class="branch-node">Room Database</div>
+                                <div class="branch-node">File Storage</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="roadmap-node">
+                                <div class="node-title">Networking & APIs</div>
+                                <div class="node-subtitle">1 month</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="branch-container">
+                                <div class="branch-node">REST APIs</div>
+                                <div class="branch-node">Retrofit</div>
+                                <div class="branch-node">Firebase</div>
+                                <div class="branch-node">JSON</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="section-divider">
+                            <span class="section-label">Architecture</span>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="roadmap-node">
+                                <div class="node-title">Architecture Patterns</div>
+                                <div class="node-subtitle">2 months</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="branch-container">
+                                <div class="branch-node">MVVM</div>
+                                <div class="branch-node">Clean Architecture</div>
+                                <div class="branch-node">Dependency Injection</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="section-divider">
+                            <span class="section-label">Advanced Topics</span>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="roadmap-node">
+                                <div class="node-title">Advanced Concepts</div>
+                                <div class="node-subtitle">2 months</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="branch-container">
+                                <div class="branch-node">Coroutines</div>
+                                <div class="branch-node">LiveData</div>
+                                <div class="branch-node">ViewModel</div>
+                                <div class="branch-node">WorkManager</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="roadmap-node">
+                                <div class="node-title">Testing & Debugging</div>
+                                <div class="node-subtitle">1 month</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="branch-container">
+                                <div class="branch-node">Unit Testing</div>
+                                <div class="branch-node">Espresso</div>
+                                <div class="branch-node">Mockito</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="section-divider">
+                            <span class="section-label">Deployment</span>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="roadmap-node">
+                                <div class="node-title">Publishing & Deployment</div>
+                                <div class="node-subtitle">2 weeks</div>
+                            </div>
+                            <div class="connector connector-vertical"></div>
+                        </div>
+
+                        <div class="roadmap-section">
+                            <div class="roadmap-node" style="border-color: var(--color-accent-500); background: var(--color-accent-50);">
+                                <div class="node-title">Android Developer</div>
+                                <div class="node-subtitle">🎉 Goal Achieved!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section" id="progress">
+                <h1 class="section-title">Learning Progress</h1>
+                <p class="section-subtitle">Track your journey through the Android development roadmap</p>
+
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <h3 id="currentPhase">Programming Fundamentals</h3>
+                        <div class="progress-counter">
+                            <span id="currentSlide">1</span> / <span id="totalSlides">9</span>
+                        </div>
+                    </div>
+
+                    <div class="slide-content" id="slideContent">
+                    </div>
+
+                    <div class="slide-controls">
+                        <button class="btn btn-secondary" id="prevBtn">← Previous</button>
+                        <button class="btn btn-primary" id="nextBtn">Next →</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section" id="chat">
+                <h1 class="section-title">AI Career Assistant</h1>
+                <p class="section-subtitle">Get personalized guidance for your Android development journey</p>
+
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message ai">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-content">
+                                <div class="message-text">Hello Zunaira! I'm your AI career assistant. I'm here to help guide you through your Android development journey. Feel free to ask me anything about the roadmap, specific technologies, learning resources, or career advice!</div>
+                                <div class="message-time">10:30 AM</div>
+                            </div>
+                        </div>
+
+                        <div class="message user">
+                            <div class="message-avatar">👤</div>
+                            <div class="message-content">
+                                <div class="message-text">Hi! I'm currently learning Java. Should I switch to Kotlin or continue with Java first?</div>
+                                <div class="message-time">10:32 AM</div>
+                            </div>
+                        </div>
+
+                        <div class="message ai">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-content">
+                                <div class="message-text">Great question! I'd recommend getting comfortable with Java fundamentals first, as it will help you understand core programming concepts. Once you're confident with Java basics and OOP, transitioning to Kotlin will be much easier since Kotlin is fully interoperable with Java. Many companies still use both languages, so knowing Java provides a strong foundation. You can start exploring Kotlin after completing the Programming Fundamentals phase.</div>
+                                <div class="message-time">10:32 AM</div>
+                            </div>
+                        </div>
+
+                        <div class="message user">
+                            <div class="message-avatar">👤</div>
+                            <div class="message-content">
+                                <div class="message-text">That makes sense! How long should each phase typically take?</div>
+                                <div class="message-time">10:35 AM</div>
+                            </div>
+                        </div>
+
+                        <div class="message ai">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-content">
+                                <div class="message-text">The timeline varies based on your background and dedication, but here's a rough estimate: Programming Fundamentals (4-6 weeks), Android Basics (3-4 weeks), UI/UX Development (2-3 weeks), Data Management (2 weeks), Networking & APIs (2 weeks), Architecture & Patterns (3-4 weeks), Advanced Concepts (3-4 weeks), Testing & Debugging (2 weeks), and Publishing (1 week). In total, you're looking at about 5-7 months of consistent learning. Remember, quality matters more than speed!</div>
+                                <div class="message-time">10:36 AM</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <textarea class="chat-input" id="chatInput" rows="1" placeholder="Type your message..."></textarea>
+                        <button class="send-btn" id="sendBtn">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const roadmapData = [
+            {
+                title: "Programming Fundamentals",
+                description: "Master the foundational programming concepts required for Android development. This phase focuses on building a strong base in programming logic, object-oriented principles, and problem-solving skills.",
+                subtopics: [
+                    "Java Basics: Syntax, variables, operators, control flow",
+                    "Kotlin Fundamentals: Modern syntax, null safety, extension functions",
+                    "Object-Oriented Programming: Classes, inheritance, polymorphism, encapsulation",
+                    "Data Structures: Arrays, lists, sets, maps, queues, stacks",
+                    "Algorithms: Sorting, searching, recursion, time complexity"
+                ]
+            },
+            {
+                title: "Android Basics",
+                description: "Learn the core components of Android development and understand how Android applications work. This phase introduces you to the Android ecosystem and essential building blocks.",
+                subtopics: [
+                    "Android Studio: IDE setup, project structure, Gradle basics",
+                    "Activity Lifecycle: Understanding onCreate, onStart, onResume, onPause, onStop",
+                    "Layouts & Views: TextView, Button, EditText, ImageView",
+                    "Intents: Explicit and implicit intents, passing data between activities",
+                    "Fragments: Fragment lifecycle, fragment transactions",
+                    "Material Design: Following Android design guidelines and principles"
+                ]
+            },
+            {
+                title: "UI/UX Development",
+                description: "Create beautiful and responsive user interfaces following Material Design principles. Learn to build engaging layouts that work across different screen sizes.",
+                subtopics: [
+                    "XML Layouts: LinearLayout, RelativeLayout, FrameLayout",
+                    "ConstraintLayout: Modern responsive layouts with constraints",
+                    "RecyclerView: Efficient lists with ViewHolder pattern",
+                    "Custom Views: Creating reusable custom UI components",
+                    "Animations: Property animations, transitions, motion layout",
+                    "Themes & Styles: Consistent styling across your application"
+                ]
+            },
+            {
+                title: "Data Management",
+                description: "Understand different data persistence methods in Android. Learn to store, retrieve, and manage data efficiently in your applications.",
+                subtopics: [
+                    "SharedPreferences: Key-value pairs for simple data storage",
+                    "SQLite: Relational database basics and SQL queries",
+                    "Room Database: Modern database abstraction layer",
+                    "File Storage: Internal and external storage, caching",
+                    "Content Providers: Sharing data between applications"
+                ]
+            },
+            {
+                title: "Networking & APIs",
+                description: "Connect your app to the internet and work with remote data. Learn to consume RESTful APIs and handle network operations efficiently.",
+                subtopics: [
+                    "RESTful APIs: HTTP methods, status codes, REST architecture",
+                    "Retrofit: Type-safe HTTP client for Android",
+                    "JSON Parsing: Converting JSON to Kotlin/Java objects with Gson or Moshi",
+                    "OkHttp: Advanced HTTP client with interceptors",
+                    "Firebase: Backend as a service for real-time databases and authentication"
+                ]
+            },
+            {
+                title: "Architecture & Patterns",
+                description: "Build scalable and maintainable applications using proven architectural patterns. Learn industry-standard approaches to structuring your code.",
+                subtopics: [
+                    "MVVM Pattern: Model-View-ViewModel separation of concerns",
+                    "MVP Pattern: Model-View-Presenter architecture",
+                    "Clean Architecture: Layered architecture with clear boundaries",
+                    "Dependency Injection: Managing dependencies and improving testability",
+                    "Dagger/Hilt: Popular DI frameworks for Android"
+                ]
+            },
+            {
+                title: "Advanced Concepts",
+                description: "Master advanced Android development techniques for building professional-grade applications. Dive into reactive programming and modern Android components.",
+                subtopics: [
+                    "Coroutines: Modern asynchronous programming in Kotlin",
+                    "RxJava: Reactive programming with observables",
+                    "LiveData: Lifecycle-aware observable data holder",
+                    "ViewModel: Manage UI data in a lifecycle-conscious way",
+                    "WorkManager: Background task scheduling",
+                    "Navigation Component: In-app navigation management"
+                ]
+            },
+            {
+                title: "Testing & Debugging",
+                description: "Ensure code quality through comprehensive testing and effective debugging. Learn to write maintainable tests and identify issues quickly.",
+                subtopics: [
+                    "Unit Testing: Testing individual components in isolation",
+                    "JUnit: Writing and running unit tests",
+                    "Espresso: UI testing framework for Android",
+                    "Mockito: Mocking framework for unit tests",
+                    "Debugging Tools: Logcat, Android Profiler, Layout Inspector"
+                ]
+            },
+            {
+                title: "Publishing & Deployment",
+                description: "Prepare your application for release and deploy it to the Google Play Store. Learn optimization techniques and CI/CD best practices.",
+                subtopics: [
+                    "App Signing: Creating keystore and signing your APK",
+                    "Google Play Console: App listing, screenshots, store presence",
+                    "App Optimization: Reducing APK size, improving performance",
+                    "ProGuard/R8: Code shrinking and obfuscation",
+                    "CI/CD: Continuous integration and deployment pipelines"
+                ]
+            }
+        ];
+
+        const navItems = document.querySelectorAll('.nav-item');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const sectionId = item.getAttribute('data-section');
+                
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                contentSections.forEach(section => section.classList.remove('active'));
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        let currentSlideIndex = 0;
+
+        function updateSlide() {
+            const slide = roadmapData[currentSlideIndex];
+            const slideContent = document.getElementById('slideContent');
+            
+            let subtopicsHTML = '<ul class="subtopics-list">';
+            slide.subtopics.forEach(topic => {
+                subtopicsHTML += `<li>${topic}</li>`;
+            });
+            subtopicsHTML += '</ul>';
+            
+            slideContent.innerHTML = `
+                <div class="slide-title">${slide.title}</div>
+                <div class="slide-description">${slide.description}</div>
+                ${subtopicsHTML}
+            `;
+            
+            document.getElementById('currentPhase').textContent = slide.title;
+            document.getElementById('currentSlide').textContent = currentSlideIndex + 1;
+            document.getElementById('totalSlides').textContent = roadmapData.length;
+            
+            document.getElementById('prevBtn').disabled = currentSlideIndex === 0;
+            document.getElementById('nextBtn').disabled = currentSlideIndex === roadmapData.length - 1;
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                updateSlide();
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentSlideIndex < roadmapData.length - 1) {
+                currentSlideIndex++;
+                updateSlide();
+            }
+        });
+
+        updateSlide();
+
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatMessages = document.getElementById('chatMessages');
+
+        function addMessage(text, isUser = false) {
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const messageHTML = `
+                <div class="message ${isUser ? 'user' : 'ai'}">
+                    <div class="message-avatar">${isUser ? '👤' : '🤖'}</div>
+                    <div class="message-content">
+                        <div class="message-text">${text}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                </div>
+            `;
+            chatMessages.insertAdjacentHTML('beforeend', messageHTML);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatInput.value = '';
+                
+                setTimeout(() => {
+                    const responses = [
+                        "That's a great question! Based on your current progress in the roadmap, I'd recommend focusing on practical projects to solidify your understanding. Would you like some project suggestions?",
+                        "I can help you with that! The best approach would be to start with small projects and gradually increase complexity. What specific area are you struggling with?",
+                        "Excellent progress! Remember that consistency is key in learning Android development. I suggest dedicating 2-3 hours daily to coding practice. Do you have a specific timeline in mind?",
+                        "That's a common challenge many developers face. I recommend checking out the official Android documentation and some hands-on tutorials. Would you like me to suggest some specific resources?",
+                        "Great initiative! Building real-world projects is the best way to learn. Consider starting with a simple app like a to-do list or weather app. Need help planning your first project?"
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addMessage(randomResponse, false);
+                }, 1000);
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+    </script>
+</body>
+</html>
