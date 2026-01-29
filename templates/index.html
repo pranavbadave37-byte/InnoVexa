@@ -53,12 +53,12 @@
         }
 
         .container {
-            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
+        /* Header */
         header {
             background: var(--bg-card);
             border-bottom: 1px solid var(--border-light);
@@ -78,12 +78,10 @@
         .logo {
             font-size: 24px;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--color-primary-600), var(--color-secondary-600));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--color-primary-600);
         }
 
+        /* Buttons */
         .btn {
             padding: 12px 28px;
             border-radius: 12px;
@@ -97,7 +95,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-500));
+            background: var(--color-primary-600);
             color: white;
             box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
         }
@@ -105,6 +103,7 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+            background: var(--color-primary-700);
         }
 
         .btn-secondary {
@@ -118,9 +117,9 @@
             transform: translateY(-2px);
         }
 
+        /* Hero Section */
         .hero {
-            height: 100vh;
-            background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-secondary-50) 100%);
+            background: var(--color-primary-50);
             padding: 100px 0 80px;
             text-align: center;
             position: relative;
@@ -189,6 +188,7 @@
             flex-wrap: wrap;
         }
 
+        /* Section Styles */
         section {
             padding: 80px 0;
         }
@@ -212,6 +212,7 @@
             margin: 0 auto;
         }
 
+        /* Cards */
         .card {
             background: var(--bg-card);
             border-radius: 16px;
@@ -236,7 +237,7 @@
             justify-content: center;
             margin-bottom: 20px;
             font-size: 28px;
-            background: linear-gradient(135deg, var(--color-primary-100), var(--color-secondary-100));
+            background: var(--color-primary-100);
         }
 
         .card h3 {
@@ -250,6 +251,7 @@
             line-height: 1.7;
         }
 
+        /* Grid Layouts */
         .grid {
             display: grid;
             gap: 32px;
@@ -263,8 +265,9 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         }
 
+        /* Problem Statement */
         .problem {
-            background: linear-gradient(135deg, #FEF3C7 0%, #FED7AA 100%);
+            background: var(--color-accent-50);
         }
 
         .problem-grid {
@@ -286,6 +289,7 @@
             color: var(--text-primary);
         }
 
+        /* How It Works */
         .steps {
             display: flex;
             flex-direction: column;
@@ -304,7 +308,7 @@
             min-width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--color-primary-600), var(--color-secondary-600));
+            background: var(--color-primary-600);
             color: white;
             display: flex;
             align-items: center;
@@ -323,12 +327,14 @@
             color: var(--text-secondary);
         }
 
+        /* Features */
         .features {
             background: var(--bg-card);
         }
 
+        /* Metrics */
         .metrics {
-            background: linear-gradient(135deg, var(--color-secondary-50) 0%, var(--color-primary-50) 100%);
+            background: var(--color-secondary-50);
         }
 
         .metrics-grid {
@@ -348,10 +354,7 @@
         .metric-number {
             font-size: 48px;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--color-primary-600), var(--color-secondary-600));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--color-primary-600);
             margin-bottom: 8px;
         }
 
@@ -360,6 +363,7 @@
             font-size: 16px;
         }
 
+        /* Tech Stack */
         .tech-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -386,8 +390,9 @@
             color: var(--text-muted);
         }
 
+        /* Final CTA */
         .final-cta {
-            background: linear-gradient(135deg, var(--color-primary-600), var(--color-secondary-600));
+            background: var(--color-primary-600);
             color: white;
             text-align: center;
             padding: 100px 0;
@@ -408,6 +413,7 @@
             transform: translateY(-2px) scale(1.05);
         }
 
+        /* Footer */
         footer {
             background: var(--text-primary);
             color: var(--text-muted);
@@ -419,6 +425,7 @@
             margin-bottom: 8px;
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 36px;
@@ -459,24 +466,27 @@
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
         <nav class="container">
             <div class="logo">NextStep</div>
-            <a href="#cta" class="btn btn-primary">Get Started</a>
+            <a href="/login" class="btn btn-primary">Get Started</a>
         </nav>
     </header>
 
+    <!-- Hero Section -->
     <section class="hero">
         <div class="container hero-content">
             <h1 class="animate-in">Navigate Your Career with AI-Powered Confidence</h1>
             <p class="animate-in">Discover personalized career roadmaps that adapt to your evolving aspirations. Transition seamlessly between roles, leverage your transferable skills, and merge multiple passions into one fulfilling career path with real-time AI guidance.</p>
             <div class="cta-buttons animate-in">
-                <a href="#cta" class="btn btn-primary">Get Started Free</a>
+                <a href="/login" class="btn btn-primary">Get Started Free</a>
                 <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
             </div>
         </div>
     </section>
 
+    <!-- Problem Statement -->
     <section class="problem">
         <div class="container">
             <div class="section-header">
@@ -504,6 +514,7 @@
         </div>
     </section>
 
+    <!-- Solution Overview -->
     <section>
         <div class="container">
             <div class="section-header">
@@ -518,6 +529,7 @@
         </div>
     </section>
 
+    <!-- How It Works -->
     <section id="how-it-works" style="background: var(--bg-card);">
         <div class="container">
             <div class="section-header">
@@ -564,6 +576,7 @@
         </div>
     </section>
 
+    <!-- Key Features -->
     <section class="features">
         <div class="container">
             <div class="section-header">
@@ -605,6 +618,7 @@
         </div>
     </section>
 
+    <!-- Benefits -->
     <section>
         <div class="container">
             <div class="section-header">
@@ -636,6 +650,7 @@
         </div>
     </section>
 
+    <!-- Impact Metrics -->
     <section class="metrics">
         <div class="container">
             <div class="section-header">
@@ -659,6 +674,7 @@
         </div>
     </section>
 
+    <!-- Technology Stack -->
     <section style="background: var(--bg-card);">
         <div class="container">
             <div class="section-header">
@@ -676,16 +692,25 @@
                 </div>
                 <div class="tech-item">
                     <h4>AI Engine</h4>
-                    <p>ML Recommendation + Google Gemini</p>
+                    <p>Google Gemini API</p>
                 </div>
                 <div class="tech-item">
-                    <h4>Cloud Infrastructure</h4>
-                    <p>Google Cloud, Firebase</p>
+                    <h4>Authentication</h4>
+                    <p>Firebase Auth</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Database</h4>
+                    <p>Cloud Firestore</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Hosting</h4>
+                    <p>Vercel / Firebase</p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Future Roadmap -->
     <section>
         <div class="container">
             <div class="section-header">
@@ -717,14 +742,16 @@
         </div>
     </section>
 
-    <section id="cta" class="final-cta">
+    <!-- Final CTA -->
+    <section class="final-cta">
         <div class="container">
             <h2>Start Building Your Future Today</h2>
             <p style="font-size: 20px; margin-bottom: 40px; opacity: 0.95;">Join thousands of professionals who've found clarity and confidence in their career journey</p>
-            <a href="/dashboard" class="btn btn-primary" style="font-size: 18px; padding: 16px 40px;">Create Your Free Account</a>
+            <a href="/login" class="btn btn-primary" style="font-size: 18px; padding: 16px 40px;">Create Your Free Account</a>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
             <p>&copy; 2026 NextStep. All rights reserved.</p>
@@ -733,6 +760,7 @@
     </footer>
 
     <script>
+        // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -743,6 +771,7 @@
             });
         });
 
+        // Intersection Observer for fade-in animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
