@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>NextStep | Career Profile Setup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        :root {
+            --primary: #059669;
+            --secondary: #0EA5E9;
+            --accent: #FACC15;
+            --bg: #F9FAFB;
+            --text: #111827;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(
+                to right,
+                rgba(14, 165, 233, 0.12),
+                rgba(5, 150, 105, 0.12)
+            );
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Container */
+        .form-container {
+            background-color: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(17, 24, 39, 0.1);
+        }
+
+        /* Header */
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .form-subtitle {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        .user-greeting {
+            font-size: 18px;
+            color: var(--text);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Form */
+        .career-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .form-label .required {
+            color: #ef4444;
+        }
+
+        .form-input,
+        .form-textarea {
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1.5px solid #d1d5db;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .char-count {
+            font-size: 12px;
+            color: #9ca3af;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        /* Button */
+        .submit-btn {
+            margin-top: 12px;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            background-color: var(--accent);
+            color: var(--text);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(250, 204, 21, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background-color: #d1d5db;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--text);
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Messages */
+        .message {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        /* Progress Indicator */
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 8px;
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 640px) {
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            .form-title {
+                font-size: 26px;
+            }
+
+            .logout-btn {
+                position: static;
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">Career Profile Setup</h1>
+            <p class="form-subtitle">
+                Tell us about yourself to get a personalized career roadmap
+            </p>
+        </div>
+
+        <div class="user-greeting" id="userGreeting">Welcome!</div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0% Complete</div>
+        </div>
+
+        <div id="formMessage" class="message"></div>
+
+        <form id="careerForm" class="career-form">
+            <div class="form-group">
+                <label class="form-label" for="fullName">
+                    Full Name <span class="required">*</span>
+                </label>
+                <input type="text" id="fullName" class="form-input" required />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="education">
+                    Education Qualification <span class="required">*</span>
+                </label>
+                <input type="text" id="education" class="form-input" placeholder="e.g., B.Tech in Computer Science" required />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="interests">
+                    Interests & Passions <span class="required">*</span>
+                </label>
+                <textarea id="interests" class="form-textarea" placeholder="What are you passionate about? What topics excite you?" required></textarea>
+                <div class="char-count" id="interestsCount">0 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="skills">
+                    Current Skills <span class="required">*</span>
+                </label>
+                <textarea id="skills" class="form-textarea" placeholder="List your current technical and soft skills" required></textarea>
+                <div class="char-count" id="skillsCount">0 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="goals">
+                    Career Goals <span class="required">*</span>
+                </label>
+                <textarea id="goals" class="form-textarea" placeholder="What do you want to achieve in your career? Where do you see yourself?" required></textarea>
+                <div class="char-count" id="goalsCount">0 characters</div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                Generate Career Roadmap 🚀
+            </button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            signOut
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc,
+            getDoc
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "{{ firebase_config.apiKey }}",
+            authDomain: "{{ firebase_config.authDomain }}",
+            projectId: "{{ firebase_config.projectId }}",
+            storageBucket: "{{ firebase_config.storageBucket }}",
+            messagingSenderId: "{{ firebase_config.messagingSenderId }}",
+            appId: "{{ firebase_config.appId }}",
+            measurementId: "{{ firebase_config.measurementId }}"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('userGreeting').textContent = 
+                    `Welcome, ${user.displayName || user.email}!`;
+                
+                if (user.displayName) {
+                    document.getElementById('fullName').value = user.displayName;
+                    updateProgress();
+                }
+            } else {
+                window.location.href = '/login';
+            }
+        });
+
+        function showMessage(message, type) {
+            const messageEl = document.getElementById('formMessage');
+            messageEl.textContent = message;
+            messageEl.className = `message ${type} show`;
+            
+            if (type === 'error') {
+                setTimeout(() => {
+                    messageEl.classList.remove('show');
+                }, 5000);
+            }
+        }
+
+        function setupCharCounter(textareaId, counterId) {
+            const textarea = document.getElementById(textareaId);
+            const counter = document.getElementById(counterId);
+            
+            textarea.addEventListener('input', () => {
+                const count = textarea.value.length;
+                counter.textContent = `${count} characters`;
+                updateProgress();
+            });
+        }
+
+        setupCharCounter('interests', 'interestsCount');
+        setupCharCounter('skills', 'skillsCount');
+        setupCharCounter('goals', 'goalsCount');
+
+        function updateProgress() {
+            const fields = [
+                document.getElementById('fullName'),
+                document.getElementById('education'),
+                document.getElementById('interests'),
+                document.getElementById('skills'),
+                document.getElementById('goals')
+            ];
+
+            let filledFields = 0;
+            fields.forEach(field => {
+                if (field.value.trim().length > 0) {
+                    filledFields++;
+                }
+            });
+
+            const progress = (filledFields / fields.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `${Math.round(progress)}% Complete`;
+        }
+
+        document.querySelectorAll('.form-input, .form-textarea').forEach(field => {
+            field.addEventListener('input', updateProgress);
+        });
+
+        document.getElementById('careerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!currentUser) {
+                showMessage('Please login first', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Generating Roadmap... <span class="spinner"></span>';
+
+            const formData = {
+                name: document.getElementById('fullName').value.trim(),
+                education: document.getElementById('education').value.trim(),
+                interests: document.getElementById('interests').value.trim(),
+                skills: document.getElementById('skills').value.trim(),
+                goals: document.getElementById('goals').value.trim()
+            };
+
+            try {
+                const response = await fetch('/api/generate-roadmap', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const roadmapData = result.roadmap;
+
+                    const userRef = doc(db, 'users', currentUser.uid);
+                    
+                    await setDoc(userRef, {
+                        email: currentUser.email,
+                        displayName: currentUser.displayName,
+                        photoURL: currentUser.photoURL || null,
+                        createdAt: new Date().toISOString(),
+                        profile: formData,
+                        roadmaps: [{
+                            ...roadmapData,
+                            isActive: true,
+                            createdAt: new Date().toISOString()
+                        }],
+                        chatHistory: [],
+                        updatedAt: new Date().toISOString()
+                    }, { merge: true });
+
+                    showMessage('Roadmap generated successfully! Redirecting...', 'success');
+
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1500);
+
+                } else {
+                    throw new Error(result.error || 'Failed to generate roadmap');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(
+                    'Failed to generate roadmap. Please try again or check your internet connection.', 
+                    'error'
+                );
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Generate Career Roadmap 🚀';
+            }
+        });
+
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('Failed to logout. Please try again.');
+            }
+        };
+    </script>
+</body>
+</html>
