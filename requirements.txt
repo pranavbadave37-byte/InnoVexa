@@ -1,1 +1,6 @@
-flask
+Flask
+Werkzeug
+python-dotenv
+google-generativeai
+firebase-admin
+requests
